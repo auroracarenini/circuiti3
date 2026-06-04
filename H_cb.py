@@ -70,7 +70,7 @@ fig, ax = plt.subplots(1, 2, figsize=(12, 6))
 # Generiamo i punti per la curva continua del fit
 fs = np.linspace(10, 60000, 700)
 H_modulo_fit = H_abb_C(tau_s, fs)
-H_moduli_dati= H_moduli
+H_moduli_dati= H_moduli 
 
 # --- Grafico 1: Scala Lineare ---
 ax[0].plot(
