@@ -52,9 +52,9 @@ err_H_LP = H_LP_exp * np.sqrt((sigma_V / V_AB)**2 + (sigma_V / Va)**2)
 err_H_HP = H_HP_exp * np.sqrt((sigma_V / Vb)**2 + (sigma_V / Va)**2)
 
 if col_t_Va in df.columns and col_t_Vb in df.columns:
-    dt_LP = (df[col_t_V_AB].values - df[col_t_Va].values) * 1e-6 
-    dt_HP = (df[col_t_Vb].values - df[col_t_Va].values) * 1e-6
-    dt_HP = - dt_HP
+    dt_LP = - (df[col_t_V_AB].values - df[col_t_Va].values) * 1e-6 
+    dt_HP = - (df[col_t_Vb].values - df[col_t_Va].values) * 1e-6
+    dt_HP =  dt_HP
     # Da qui in poi calcola la fase correttamente usando i secondi
     fase_LP_exp = 2 * np.pi * f_dati * dt_LP
     fase_HP_exp = 2 * np.pi * f_dati * dt_HP

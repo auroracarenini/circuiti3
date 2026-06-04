@@ -9,7 +9,7 @@ R_L = 27
 
 # Inserimento degli errori forniti
 sigma_V = 20 * np.sqrt(2) * 1e-3  # 20*sqrt(2) mV convertiti in Volt
-sigma_t = 2e-6                    # 2 microsecondi convertiti in secondi
+sigma_t = 2e-9                   # 2 microsecondi convertiti in secondi
 
 file_path = 'RL.csv'
 
@@ -26,9 +26,15 @@ def passa_alto_modolo(f, L):
     return np.sqrt(R_L**2 + (2 * np.pi * f * L)**2) / np.sqrt((R_valore + R_L)**2 + (2 * np.pi * f * L)**2)
 
 def passa_basso_modolo(f, L):
-    return R_valore/np.sqrt((R_valore + R_L)**2 + (2 * np.pi * f * L))
+    return R_valore/np.sqrt((R_valore + R_L)**2 + (2 * np.pi * f * L)**2)
 
+def passa_basso_fase_rl(f, L):
+    # Tensione su R
+    return -np.arctan((2 * np.pi * f * L) / (R_valore + R_L))
 
+def passa_alto_fase_rl(f, L):
+    # Tensione su L (considerando la sua R_L interna)
+    return np.arctan((2 * np.pi * f * L) / R_L) - np.arctan((2 * np.pi * f * L) / (R_valore + R_L))
 
 df = pd.read_csv(file_path).sort_values(by=col_f)
 
@@ -46,7 +52,7 @@ err_H_LP = H_LP_exp * np.sqrt((sigma_V / V_AB)**2 + (sigma_V / Va)**2)
 err_H_HP = H_HP_exp * np.sqrt((sigma_V / Vb)**2 + (sigma_V / Va)**2)
 
 if col_t_Va in df.columns and col_t_Vb in df.columns:
-    dt_LP = (df[col_t_V_AB].values - df[col_t_Va].values) * 1e-6 
+    dt_LP = - (df[col_t_V_AB].values - df[col_t_Va].values) * 1e-6 
     dt_HP = (df[col_t_Vb].values - df[col_t_Va].values) * 1e-6
     dt_HP = - dt_HP
     # Da qui in poi calcola la fase correttamente usando i secondi
@@ -85,10 +91,10 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
 x_min_fissato = min(f_dati) * 0.8
 x_max_fissato = max(f_dati) * 1.2
 # --- Grafico 1: Modulo Scala Lineare ---
-ax1.errorbar(f_dati, H_LP_exp, yerr=err_H_LP, fmt='o', color='blue', label='Dati Passa-Basso (V_AB/V_A)', capsize=3)
-ax1.plot(f_fit, passa_alto_modolo(f_fit, C_fit_LP), 'b-', label='Fit Passa-Basso')
-ax1.errorbar(f_dati, H_HP_exp, yerr=err_H_HP, fmt='s', color='red', label='Dati Passa-Alto (V_B/V_A)', capsize=3)
-ax1.plot(f_fit, passa_basso_modolo(f_fit, C_fit_HP), 'r-', label='Fit Passa-Alto')
+ax1.errorbar(f_dati, H_LP_exp, yerr=err_H_LP, fmt='o', color='blue', label='Dati Passa-Alto (V_AB/V_A)', capsize=3)
+ax1.plot(f_fit, passa_alto_modolo(f_fit, C_fit_LP), 'b-', label='Fit Passa-Alto')
+ax1.errorbar(f_dati, H_HP_exp, yerr=err_H_HP, fmt='s', color='red', label='Dati Passa-Basso (V_B/V_A)', capsize=3)
+ax1.plot(f_fit, passa_basso_modolo(f_fit, C_fit_HP), 'r-', label='Fit Passa-Basso')
 ax1.set_title("Modulo della Funzione di Trasferimento (Lineare)")
 ax1.set_xlabel("Frequenza [Hz]")
 ax1.set_ylabel("|H(f)|")
@@ -97,9 +103,9 @@ ax1.legend()
 
 # --- Grafico 2: Modulo Scala Bi-Logaritmica ---
 ax2.loglog(f_fit, passa_alto_modolo(f_fit, C_fit_LP), 'b-')
-ax2.errorbar(f_dati, H_LP_exp, yerr=err_H_LP, fmt='o', color='blue', capsize=3, label='Dati Passa-Basso')
+ax2.errorbar(f_dati, H_LP_exp, yerr=err_H_LP, fmt='o', color='blue', capsize=3, label='Dati Passa-Alto')
 ax2.loglog(f_fit, passa_basso_modolo(f_fit, C_fit_HP), 'r-')
-ax2.errorbar(f_dati, H_HP_exp, yerr=err_H_HP, fmt='s', color='red', capsize=3, label='Dati Passa-Alto')
+ax2.errorbar(f_dati, H_HP_exp, yerr=err_H_HP, fmt='s', color='red', capsize=3, label='Dati Passa-Basso')
 ax2.set_title("Modulo della Funzione di Trasferimento (Bicellulare/Log)")
 ax2.set_xlabel("Frequenza [Hz]")
 ax2.set_ylabel("|H(f)|")
@@ -114,3 +120,25 @@ plt.savefig('Fit_Modulo_RL.png', dpi=300)
 print("Grafico del Modulo salvato come 'Fit_Modulo_RC.png'")
 plt.show()
 
+# --- GRAFICO FASE ---
+if DATO_FASE_PRESENTE:
+    fig2, ax3 = plt.subplots(figsize=(8, 6))
+    
+    # Ricorda: dt_LP è associato a V_AB (Induttore -> Passa-Alto)
+    ax3.errorbar(f_dati, fase_LP_exp, yerr=err_fase_LP, fmt='o', color='blue', label='Dati Passa-Alto (V_AB)', capsize=3)
+    ax3.plot(f_fit, passa_alto_fase_rl(f_fit, C_fit_LP), 'b--', label='Fit Passa-Alto')
+    
+    # Ricorda: dt_HP nel tuo codice è associato a Vb (Resistenza -> Passa-Basso)
+    ax3.errorbar(f_dati, fase_HP_exp, yerr=err_fase_HP, fmt='s', color='red', label='Dati Passa-Basso (V_b)', capsize=3)
+    ax3.plot(f_fit, passa_basso_fase_rl(f_fit, C_fit_HP), 'r--', label='Fit Passa-Basso')
+    
+    ax3.set_xscale('log')
+    ax3.set_title("Fase della Funzione di Trasferimento (Semi-Log)")
+    ax3.set_xlabel("Frequenza [Hz]")
+    ax3.set_ylabel("Fase [rad]")
+    ax3.grid(True, which="both", ls="--")
+    ax3.legend()
+    plt.tight_layout()
+    plt.savefig('Fit_Fase_RL.png', dpi=300)
+    print("Grafico della Fase salvato come 'Fit_Fase_RL.png'")
+    plt.show()
