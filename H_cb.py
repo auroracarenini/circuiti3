@@ -70,6 +70,7 @@ fig, ax = plt.subplots(1, 2, figsize=(12, 6))
 # Generiamo i punti per la curva continua del fit (fino a 150 kHz come da dispensa)
 fs = np.linspace(10, 150000, 1000)
 H_modulo_fit = H_abb_C(tau_s, fs)
+H_moduli_dati= H_moduli
 
 # --- Grafico 1: Scala Lineare ---
 ax[0].plot(fs, H_modulo_fit, linestyle="--", color="blue", label="Curva di Fit (\u03c4)")
