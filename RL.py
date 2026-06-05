@@ -6,8 +6,6 @@ from scipy.optimize import curve_fit
 
 R_valore = 4648  
 R_L = 27
-
-# Inserimento degli errori forniti
 sigma_V = 20 * np.sqrt(2) * 1e-3  # 20*sqrt(2) mV convertiti in Volt
 sigma_t = 2e-9                   # 2 microsecondi convertiti in secondi
 
@@ -43,11 +41,11 @@ Va = df[col_Va].values
 Vb = df[col_Vb].values
 V_AB = df[col_V_AB].values * 1.96
 
-# --- MODULO ---
+# modulo
 H_LP_exp = V_AB / Va
 H_HP_exp = Vb / Va
 
-# Propagazione errore del modulo: sigma_H = H * sqrt((sigma_V/Vout)^2 + (sigma_V/Vin)^2)
+# errore del modulo
 err_H_LP = H_LP_exp * np.sqrt((sigma_V / V_AB)**2 + (sigma_V / Va)**2)
 err_H_HP = H_HP_exp * np.sqrt((sigma_V / Vb)**2 + (sigma_V / Va)**2)
 
@@ -80,8 +78,8 @@ popt_HP, pcov_HP = curve_fit(passa_basso_modolo, f_dati, H_HP_exp, p0=[p0_L], si
 C_fit_HP, C_err_HP = popt_HP[0], np.sqrt(pcov_HP[0][0])
 
 print("--- RISULTATI DEI FIT (MODULO) ---")
-print(f"C (Passa-Basso): {C_fit_LP*1e9:.2f} ± {C_err_LP*1e9:.2f} nF")
-print(f"C (Passa-Alto):  {C_fit_HP*1e9:.2f} ± {C_err_HP*1e9:.2f} nF")
+print(f"L (Passa-Basso): {C_fit_LP*1e3:.2f} ± {C_err_LP*1e3:.2f} mH")
+print(f"L (Passa-Alto):  {C_fit_HP*1e3:.2f} ± {C_err_HP*1e3:.2f} mH")
 
 
 f_fit = np.logspace(np.log10(min(f_dati)), np.log10(max(f_dati)), 500)
