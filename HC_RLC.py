@@ -29,7 +29,7 @@ def HC_rlc(f,L,C):
 def passa_alto_fase_R(f, L, C):
     omega = 2 * np.pi * f
     # Fase per circuito RLC con uscita ai capi di R
-    return -np.pi/2-np.arctan((omega * L - 1 / (omega * C)) / (R_valore + R_L))
+    return np.pi/2+np.arctan((omega * L - 1 / (omega * C)) / (R_valore + R_L))
 
 # --- CARICAMENTO DATI ---
 
@@ -79,7 +79,7 @@ fig, axs = plt.subplots(2, 2, figsize=(14, 10))
 
 # --- [0, 0] Modulo Scala Lineare ---
 axs[0, 0].errorbar(f_dati, H, yerr=err_H_HP, fmt='o', color='blue', label='Dati Sperimentali', capsize=3)
-axs[0, 0].plot(f_fit, passa_alto_modulo_R(f_fit, L_fit_HP, C_fit_HP), 'b-', label='Modello Teorico')
+axs[0, 0].plot(f_fit, HC_rlc(f_fit, L_fit_HP, C_fit_HP), 'b-', label='Modello Teorico')
 axs[0, 0].set_title("Modulo del Rapporto di Trasferimento (Lineare)")
 axs[0, 0].set_xlabel("Frequenza [Hz]")
 axs[0, 0].set_ylabel("|H(f)|")
@@ -87,7 +87,7 @@ axs[0, 0].grid(True, which="both", ls="--")
 axs[0, 0].legend()
 
 # --- [0, 1] Modulo Scala Log-Log ---
-axs[0, 1].loglog(f_fit, passa_alto_modulo_R(f_fit, L_fit_HP, C_fit_HP), 'b-', label='Modello Teorico')
+axs[0, 1].loglog(f_fit, HC_rlc(f_fit, L_fit_HP, C_fit_HP), 'b-', label='Modello Teorico')
 axs[0, 1].errorbar(f_dati, H, yerr=err_H_HP, fmt='o', color='blue', capsize=3, label='Dati Sperimentali')
 axs[0, 1].set_title("Modulo del Rapporto di Trasferimento (Log-Log)")
 axs[0, 1].set_xlabel("Frequenza [Hz]")
