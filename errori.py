@@ -3,7 +3,7 @@ import numpy as np
 
 #in teoria gli errori della fase di tempo sono tutti uguali poiche oltre che a ipendere dalla stessa arcotangente sono solamente
 # traslati si k * pi /2  #
-def sigma_fase(f,L,C,R_tot,sigma_l,sigma_r,sigma_c,Dt):
+def sigma_fase(f,L,C,R_tot,sigma_l,sigma_r,sigma_c):
     omega = f * 2 * np.pi
     ind = omega*L   #caratterizzatore dell'induttore nelle formule 
     cond = 1/(omega*C) #caratterizzatore del condensatore nelle formule 
