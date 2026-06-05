@@ -5,7 +5,7 @@ from scipy.optimize import curve_fit
 
 # --- CONFIGURAZIONE E DATI ---
 R_valore = 767 
-R_L = 27
+R_L = 27.3
 sigma_V = 20 * np.sqrt(2) * 1e-3  # 20*sqrt(2) mV convertiti in Volt
 sigma_t = 2e-10                  # CORRETTO: 2 microsecondi = 2e-6 secondi
 
