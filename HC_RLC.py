@@ -112,26 +112,26 @@ print(f"p-value Fase: {p_value_fase:.4e}")
 # --- GRAFICI ---
 f_fit = np.logspace(np.log10(min(f_dati)), np.log10(max(f_dati)), 6000)
 
-fig, axs = plt.subplots(2, 2, figsize=(14, 10))
+fig, axs = plt.subplots(1, 2, figsize= (14,7))
 
 # --- [0, 0] Modulo Scala Lineare ---
-axs[0, 0].errorbar(f_dati, H, yerr=err_H_HP, fmt='o', color='blue', label='Dati Sperimentali', capsize=3)
-axs[0, 0].plot(f_fit, HC_rlc(f_fit, L_fit_HP, C_fit_HP), 'b-', label='Modello Teorico')
-axs[0, 0].set_title("Modulo del Rapporto di Trasferimento (Lineare)")
-axs[0, 0].set_xlabel("Frequenza [Hz]")
-axs[0, 0].set_ylabel("|H(f)|")
-axs[0, 0].grid(True, which="both", ls="--")
-axs[0, 0].legend()
+axs[0].errorbar(f_dati, H, yerr=err_H_HP, fmt='o', color='blue', label='Dati Sperimentali', capsize=3)
+axs[0].plot(f_fit, HC_rlc(f_fit, L_fit_HP, C_fit_HP), 'b-', label='Modello Teorico')
+axs[0].set_title("Modulo del Rapporto di Trasferimento (Lineare)")
+axs[0].set_xlabel("Frequenza [Hz]")
+axs[0].set_ylabel("|H(f)|")
+axs[0].grid(True, which="both", ls="--")
+axs[0].legend()
 
 # --- [0, 1] Modulo Scala Log-Log ---
-axs[0, 1].loglog(f_fit, HC_rlc(f_fit, L_fit_HP, C_fit_HP), 'b-', label='Modello Teorico')
-axs[0, 1].errorbar(f_dati, H, yerr=err_H_HP, fmt='o', color='blue', capsize=3, label='Dati Sperimentali')
-axs[0, 1].set_title("Modulo del Rapporto di Trasferimento (Log-Log)")
-axs[0, 1].set_xlabel("Frequenza [Hz]")
-axs[0, 1].set_ylabel("|H(f)|")
-axs[0, 1].grid(True, which="both", ls="--")
-axs[0, 1].legend()
-
+axs[1].loglog(f_fit, HC_rlc(f_fit, L_fit_HP, C_fit_HP), 'b-', label='Modello Teorico')
+axs[1].errorbar(f_dati, H, yerr=err_H_HP, fmt='o', color='blue', capsize=3, label='Dati Sperimentali')
+axs[1].set_title("Modulo del Rapporto di Trasferimento (Log-Log)")
+axs[1].set_xlabel("Frequenza [Hz]")
+axs[1].set_ylabel("|H(f)|")
+axs[1].grid(True, which="both", ls="--")
+axs[1].legend()
+'''
 # --- [1, 0] Fase Scala Lineare ---
 axs[1, 0].errorbar(f_dati, fase_dati, yerr=err_fase, fmt='o', color='red', label='Dati Sperimentali', capsize=3)
 axs[1, 0].plot(f_fit, passa_basso_fase_R(f_fit, L_fit_HP, C_fit_HP), 'r-', label='Modello Teorico')
@@ -149,7 +149,7 @@ axs[1, 1].set_xlabel("Frequenza [Hz]")
 axs[1, 1].set_ylabel("Fase [rad]")
 axs[1, 1].grid(True, which="both", ls="--")
 axs[1, 1].legend()
-
+'''
 plt.tight_layout()
 plt.savefig('Analisi_Completa_RLC_C.png', dpi=300)
 print("\nGrafico completo salvato come 'Analisi_Completa_RLC_C.png'")
