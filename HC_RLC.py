@@ -61,7 +61,6 @@ p0_L = 1e-2      # 10 mH
 c0_C = 68 * 1e-9 # 68 nF
 
 # --- ESECUZIONE DEL FIT ---
-# CORRETTO: Passiamo sia p0_L sia c0_C come array di stime iniziali
 popt_HP, pcov_HP = curve_fit(HC_rlc, f_dati, H, p0=[p0_L, c0_C], sigma=err_H_HP, absolute_sigma=True)
 
 # Estrazione dei risultati del fit per entrambi i parametri
