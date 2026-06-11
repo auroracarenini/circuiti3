@@ -112,45 +112,62 @@ print(f"p-value Fase: {p_value_fase:.4e}")
 # --- GRAFICI ---
 f_fit = np.logspace(np.log10(min(f_dati)), np.log10(max(f_dati)), 6000)
 
-fig, axs = plt.subplots(1, 2, figsize= (14,7))
+#f_fit = np.linspace(30,max(f_dati)+1000,700)
+fig, axs = plt.subplots(1, 1, figsize= (10,10))
 
 # --- [0, 0] Modulo Scala Lineare ---
-axs[0].errorbar(f_dati, H, yerr=err_H_HP, fmt='o', color='blue', label='Dati Sperimentali', capsize=3)
-axs[0].plot(f_fit, HC_rlc(f_fit, L_fit_HP, C_fit_HP), 'b-', label='Modello Teorico')
-axs[0].set_title("Modulo del Rapporto di Trasferimento (Lineare)")
-axs[0].set_xlabel("Frequenza [Hz]")
-axs[0].set_ylabel("|H(f)|")
-axs[0].grid(True, which="both", ls="--")
-axs[0].legend()
+axs.errorbar(f_dati, H, yerr=err_H_HP, fmt='o', color='blue', label='Dati Sperimentali', capsize=3)
+axs.plot(f_fit, HC_rlc(f_fit, L_fit_HP, C_fit_HP), 'b-', label='Modello Teorico')
+axs.set_title("Modulo del Rapporto di Trasferimento (Lineare)")
+axs.set_xlabel("Frequenza [Hz]")
+axs.set_ylabel("|H(f)|")
+axs.grid(True, which="both", ls="--")
+axs.legend()
+
+plt.tight_layout()
+plt.savefig('Analisi_Completa_RLC_C_modulo_lineare.png', dpi=300)
+
+fig, axs1 = plt.subplots(1, 1, figsize= (10,10))
 
 # --- [0, 1] Modulo Scala Log-Log ---
-axs[1].loglog(f_fit, HC_rlc(f_fit, L_fit_HP, C_fit_HP), 'b-', label='Modello Teorico')
-axs[1].errorbar(f_dati, H, yerr=err_H_HP, fmt='o', color='blue', capsize=3, label='Dati Sperimentali')
-axs[1].set_title("Modulo del Rapporto di Trasferimento (Log-Log)")
-axs[1].set_xlabel("Frequenza [Hz]")
-axs[1].set_ylabel("|H(f)|")
-axs[1].grid(True, which="both", ls="--")
-axs[1].legend()
-'''
+axs1.loglog(f_fit, HC_rlc(f_fit, L_fit_HP, C_fit_HP), 'b-', label='Modello Teorico')
+axs1.errorbar(f_dati, H, yerr=err_H_HP, fmt='o', color='blue', capsize=3, label='Dati Sperimentali')
+axs1.set_title("Modulo del Rapporto di Trasferimento (Log-Log)")
+axs1.set_xlabel("Frequenza [Hz]")
+axs1.set_ylabel("|H(f)|")
+axs1.grid(True, which="both", ls="--")
+axs1.legend()
+
+plt.tight_layout()
+plt.savefig('Analisi_Completa_RLC_C_modulo_log.png', dpi=300)
+
+fig, ays = plt.subplots(1, 1, figsize= (10,10))
 # --- [1, 0] Fase Scala Lineare ---
-axs[1, 0].errorbar(f_dati, fase_dati, yerr=err_fase, fmt='o', color='red', label='Dati Sperimentali', capsize=3)
-axs[1, 0].plot(f_fit, passa_basso_fase_R(f_fit, L_fit_HP, C_fit_HP), 'r-', label='Modello Teorico')
-axs[1, 0].set_title("Fase della Funzione di Trasferimento (Lineare)")
-axs[1, 0].set_xlabel("Frequenza [Hz]")
-axs[1, 0].set_ylabel("Fase [rad]")
-axs[1, 0].grid(True, which="both", ls="--")
-axs[1, 0].legend()
+ays.errorbar(f_dati, fase_dati, yerr=err_fase, fmt='o', color='red', label='Dati Sperimentali', capsize=3)
+ays.plot(f_fit, passa_basso_fase_R(f_fit, L_fit_HP, C_fit_HP), 'r-', label='Modello Teorico')
+ays.set_title("Fase della Funzione di Trasferimento (Lineare)")
+ays.set_xlabel("Frequenza [Hz]")
+ays.set_ylabel("Fase [rad]")
+ays.grid(True, which="both", ls="--")
+ays.legend()
+
+plt.tight_layout()
+plt.savefig('Analisi_Completa_RLC_C_fase_lineare.png', dpi=300)
+
+
+fig, ays1 = plt.subplots(1, 1, figsize= (10,10))
 
 # --- [1, 1] Fase Scala Semilogaritmica (Asse X Log) ---
-axs[1, 1].semilogx(f_fit, passa_basso_fase_R(f_fit, L_fit_HP, C_fit_HP), 'r-', label='Modello Teorico')
-axs[1, 1].errorbar(f_dati, fase_dati, yerr=err_fase, fmt='o', color='red', capsize=3, label='Dati Sperimentali')
-axs[1, 1].set_title("Fase della Funzione di Trasferimento (Semilog-X)")
-axs[1, 1].set_xlabel("Frequenza [Hz]")
-axs[1, 1].set_ylabel("Fase [rad]")
-axs[1, 1].grid(True, which="both", ls="--")
-axs[1, 1].legend()
-'''
+ays1.semilogx(f_fit, passa_basso_fase_R(f_fit, L_fit_HP, C_fit_HP), 'r-', label='Modello Teorico')
+ays1.errorbar(f_dati, fase_dati, yerr=err_fase, fmt='o', color='red', capsize=3, label='Dati Sperimentali')
+ays1.set_title("Fase della Funzione di Trasferimento (Semilog-X)")
+ays1.set_xlabel("Frequenza [Hz]")
+ays1.set_ylabel("Fase [rad]")
+ays1.grid(True, which="both", ls="--")
+ays1.legend()
+
 plt.tight_layout()
-plt.savefig('Analisi_Completa_RLC_C.png', dpi=300)
-print("\nGrafico completo salvato come 'Analisi_Completa_RLC_C.png'")
+plt.savefig('Analisi_Completa_RLC_C_fase_log.png', dpi=300)
+
+print("\nGrafici completo salvati come 'Analisi_Completa_RLC_C_modulo.png' e 'Analisi_Completa_RLC_C_fase.png'")
 plt.show()
