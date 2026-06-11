@@ -53,7 +53,7 @@ sigma_t_b_noise = sigma_V / (2 * np.pi * f_dati * Vb)
 
 # 2. Risoluzione temporale intrinseca dell'oscilloscopio (Incertezza di lettura)
 # Valore stimato di circa 400 ns (adeguato se i punti ad alta frequenza deviano di ~0.1 rad)
-sigma_t_str = 0.7e-6  
+sigma_t_str = 0.01/f_dati  
 
 # 3. Composizione in quadratura degli errori per singolo canali
 sigma_t_a = np.sqrt(sigma_t_a_noise**2 + sigma_t_str**2)
