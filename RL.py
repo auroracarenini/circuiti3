@@ -67,7 +67,7 @@ if col_t_Va in df.columns and col_t_Vb in df.columns:
     
     fase_LP_exp = 2 * np.pi * f_dati * dt_LP
     fase_HP_exp = 2 * np.pi * f_dati * dt_HP
-    
+    sigma_t_str = 0.01 / f_dati
     # --- MODELLO DI ERRORE DINAMICO SULLA FASE ---
     sigma_t_A = np.sqrt((sigma_V / (2 * np.pi * f_dati * Va))**2 + sigma_t_str**2)
     sigma_t_B = np.sqrt((sigma_V / (2 * np.pi * f_dati * Vb))**2 + sigma_t_str**2)
