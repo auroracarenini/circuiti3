@@ -52,7 +52,6 @@ sigma_t_a_noise = sigma_V / (2 * np.pi * f_dati * Va)
 sigma_t_b_noise = sigma_V / (2 * np.pi * f_dati * Vb)
 
 # 2. Risoluzione temporale intrinseca dell'oscilloscopio (Incertezza di lettura)
-# Valore stimato di circa 400 ns (adeguato se i punti ad alta frequenza deviano di ~0.1 rad)
 sigma_t_str = 0.01/f_dati  
 
 # 3. Composizione in quadratura degli errori per singolo canali
@@ -115,6 +114,9 @@ axs[0, 1].errorbar(f_dati, H, yerr=err_H_HP, fmt='o', color='blue', capsize=3, l
 axs[0, 1].set_title(f"Modulo (Log-Log)\n$\\chi^2$={chi2_mod:.1f}, p-val={p_value_mod:.2e}")
 axs[0, 1].set_xlabel("Frequenza [Hz]")
 axs[0, 1].set_ylabel("|H(f)|")
+# --- MODIFICA ASSE X LOG ---
+axs[0, 1].set_xlim(min(f_dati) * 0.8, max(f_dati) * 1.2)
+# ---------------------------
 axs[0, 1].grid(True, which="both", ls="--")
 axs[0, 1].legend()
 
@@ -133,6 +135,9 @@ axs[1, 1].errorbar(f_dati, fase_dati, yerr=err_fase, fmt='o', color='red', capsi
 axs[1, 1].set_title(f"Fase (Semilog-X)\n$\\chi^2$={chi2_fase:.1f}, p-val={p_value_fase:.2e}")
 axs[1, 1].set_xlabel("Frequenza [Hz]")
 axs[1, 1].set_ylabel("Fase [rad]")
+# --- MODIFICA ASSE X LOG ---
+axs[1, 1].set_xlim(min(f_dati) * 0.8, max(f_dati) * 1.2)
+# ---------------------------
 axs[1, 1].grid(True, which="both", ls="--")
 axs[1, 1].legend()
 
