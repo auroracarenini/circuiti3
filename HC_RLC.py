@@ -25,8 +25,6 @@ def HC_rlc(f,L,C):
     cond = 1/(omega*C) #cariavile del condensatore (è sempre uguale) 
     return cond/np.sqrt((R_valore+R_L)**2+(omega*L-cond)**2)
 
-
-
 def passa_basso_fase_R(f, L, C):
     omega = 2 * np.pi * f
     # Fase per circuito RLC con uscita ai capi di R
@@ -68,7 +66,6 @@ sigma_t_a_noise = sigma_V / (2 * np.pi * f_dati * Va)
 sigma_t_b_noise = sigma_V / (2 * np.pi * f_dati * Vb)
 
 # 2. Risoluzione temporale intrinseca dell'oscilloscopio (Incertezza di lettura)
-# Valore stimato di circa 400 ns (adeguato se i punti ad alta frequenza deviano di ~0.1 rad)
 sigma_t_str = 0.005 / f_dati  
 
 # 3. Composizione in quadratura degli errori per singolo canali
@@ -109,10 +106,10 @@ p_value_fase = chi2.sf(chi2_fase, dof_fase)
 print("\n--- STATISTICHE DELLA FASE (CONFRONTO MODELLO) ---")
 print(f"Chi2 Fase: {chi2_fase:.2f} / {dof_fase} DoF")
 print(f"p-value Fase: {p_value_fase:.4e}")
+
 # --- GRAFICI ---
 f_fit = np.logspace(np.log10(min(f_dati)), np.log10(max(f_dati)), 6000)
 
-#f_fit = np.linspace(30,max(f_dati)+1000,700)
 fig, axs = plt.subplots(1, 1, figsize= (10,10))
 
 # --- [0, 0] Modulo Scala Lineare ---
@@ -135,6 +132,9 @@ axs1.errorbar(f_dati, H, yerr=err_H_HP, fmt='o', color='blue', capsize=3, label=
 axs1.set_title("Modulo del Rapporto di Trasferimento (Log-Log)")
 axs1.set_xlabel("Frequenza [Hz]")
 axs1.set_ylabel("|H(f)|")
+# --- FIXED: Regolazione dinamica asse X logaritmico ---
+axs1.set_xlim(min(f_dati) * 0.8, max(f_dati) * 1.2)
+# -----------------------------------------------------
 axs1.grid(True, which="both", ls="--")
 axs1.legend()
 
@@ -154,7 +154,6 @@ ays.legend()
 plt.tight_layout()
 plt.savefig('Analisi_Completa_RLC_C_fase_lineare.png', dpi=300)
 
-
 fig, ays1 = plt.subplots(1, 1, figsize= (10,10))
 
 # --- [1, 1] Fase Scala Semilogaritmica (Asse X Log) ---
@@ -163,6 +162,9 @@ ays1.errorbar(f_dati, fase_dati, yerr=err_fase, fmt='o', color='red', capsize=3,
 ays1.set_title("Fase della Funzione di Trasferimento (Semilog-X)")
 ays1.set_xlabel("Frequenza [Hz]")
 ays1.set_ylabel("Fase [rad]")
+# --- FIXED: Regolazione dinamica asse X logaritmico ---
+ays1.set_xlim(min(f_dati) * 0.8, max(f_dati) * 1.2)
+# -----------------------------------------------------
 ays1.grid(True, which="both", ls="--")
 ays1.legend()
 
